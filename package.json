@@ -1,18 +1,26 @@
 {
-  "name": "@playwright/mcp",
-  "version": "0.0.15",
-  "description": "Playwright Tools for MCP",
+  "name": "@playwright/record-mcp",
+  "version": "0.0.1",
+  "description": "Playwright MCP with video recording capabilities",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/microsoft/playwright-mcp.git"
+    "url": "git+https://github.com/korwabs/playwright-record-mcp.git"
   },
-  "homepage": "https://playwright.dev",
+  "keywords": [
+    "playwright",
+    "record",
+    "mcp"
+  ],
   "engines": {
     "node": ">=18"
   },
   "author": {
-    "name": "Microsoft Corporation"
+    "name": "WABS Corporation"
   },
+  "contributors": [
+    "Microsoft Corporation",
+    "WABS Corporation"
+  ],
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc",

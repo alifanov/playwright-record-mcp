@@ -1,70 +1,74 @@
-## Playwright MCP
+# Playwright Record MCP
 
-A Model Context Protocol (MCP) server that provides browser automation capabilities using [Playwright](https://playwright.dev). This server enables LLMs to interact with web pages through structured accessibility snapshots, bypassing the need for screenshots or visually-tuned models.
+Playwright Record MCP is a Model Context Protocol (MCP) server that provides browser automation capabilities using [Playwright](https://playwright.dev/). This server adds video recording functionality to record browser interactions. It enables LLMs (Large Language Models) to interact with web pages through structured accessibility snapshots, without requiring screenshots or visual models.
 
-### Key Features
+## Key Features
 
 - **Fast and lightweight**: Uses Playwright's accessibility tree, not pixel-based input.
 - **LLM-friendly**: No vision models needed, operates purely on structured data.
 - **Deterministic tool application**: Avoids ambiguity common with screenshot-based approaches.
+- **Video recording**: Ability to record browser interactions as video.
 
-### Use Cases
+## Use Cases
 
 - Web navigation and form-filling
 - Data extraction from structured content
-- Automated testing driven by LLMs
+- LLM-driven automated testing
 - General-purpose browser interaction for agents
+- Recording and analyzing browser interactions
 
-### Example config
+## Installation
+
+### Installation via NPM
+
+```bash
+npm install @playwright/record-mcp
+```
+
+Or
+
+```bash
+npx @playwright/record-mcp
+```
+
+### Configuration Example
 
 #### NPX
 
-```js
+```json
 {
   "mcpServers": {
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest"
+        "@playwright/record-mcp@latest"
       ]
     }
   }
 }
 ```
 
-#### Installation in VS Code
+### Installation in VS Code
 
-Install the Playwright MCP server in VS Code using one of these buttons:
-
-<!--
-// Generate using?:
-const config = JSON.stringify({ name: 'playwright', command: 'npx', args: ["-y", "@playwright/mcp@latest"] });
-const urlForWebsites = `vscode:mcp/install?${encodeURIComponent(config)}`;
-// Github markdown does not allow linking to `vscode:` directly, so you can use our redirect:
-const urlForGithub = `https://insiders.vscode.dev/redirect?url=${encodeURIComponent(urlForWebsites)}`;
--->
-
-[<img src="https://img.shields.io/badge/VS_Code-VS_Code?style=flat-square&label=Install%20Server&color=0098FF" alt="Install in VS Code">](https://insiders.vscode.dev/redirect?url=vscode%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522playwright%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540playwright%252Fmcp%2540latest%2522%255D%257D)  [<img alt="Install in VS Code Insiders" src="https://img.shields.io/badge/VS_Code_Insiders-VS_Code_Insiders?style=flat-square&label=Install%20Server&color=24bfa5">](https://insiders.vscode.dev/redirect?url=vscode-insiders%3Amcp%2Finstall%3F%257B%2522name%2522%253A%2522playwright%2522%252C%2522command%2522%253A%2522npx%2522%252C%2522args%2522%253A%255B%2522-y%2522%252C%2522%2540playwright%252Fmcp%2540latest%2522%255D%257D)
-
-Alternatively, you can install the Playwright MCP server using the VS Code CLI:
+You can install the Playwright Record MCP server using VS Code CLI:
 
 ```bash
 # For VS Code
-code --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/mcp@latest"]}'
+code --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/record-mcp@latest"]}'
 ```
 
 ```bash
 # For VS Code Insiders
-code-insiders --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/mcp@latest"]}'
+code-insiders --add-mcp '{"name":"playwright","command":"npx","args":["@playwright/record-mcp@latest"]}'
 ```
 
-After installation, the Playwright MCP server will be available for use with your GitHub Copilot agent in VS Code.
+After installation, the Playwright Record MCP server will be available for use with your GitHub Copilot agent in VS Code.
 
-### CLI Options
+## CLI Options
 
-The Playwright MCP server supports the following command-line options:
+The Playwright Record MCP server supports the following command-line options:
 
-- `--browser <browser>`: Browser or chrome channel to use. Possible values:
+- `--browser <browser>`: Browser or Chrome channel to use. Possible values:
   - `chrome`, `firefox`, `webkit`, `msedge`
   - Chrome channels: `chrome-beta`, `chrome-canary`, `chrome-dev`
   - Edge channels: `msedge-beta`, `msedge-canary`, `msedge-dev`
@@ -76,31 +80,31 @@ The Playwright MCP server supports the following command-line options:
 - `--port <port>`: Port to listen on for SSE transport
 - `--user-data-dir <path>`: Path to the user data directory
 - `--vision`: Run server that uses screenshots (Aria snapshots are used by default)
+- `--record`: Record browser interactions as video (new feature)
+- `--record-path <path>`: Path to save recording files (default: ./recordings)
+- `--record-format <format>`: Recording format, possible values: mp4, webm (default: mp4)
 
-### User data directory
+## User Data Directory
 
-Playwright MCP will launch the browser with the new profile, located at
+Playwright Record MCP will launch the browser with a new profile, located at:
 
-```
-- `%USERPROFILE%\AppData\Local\ms-playwright\mcp-chrome-profile` on Windows
-- `~/Library/Caches/ms-playwright/mcp-chrome-profile` on macOS
-- `~/.cache/ms-playwright/mcp-chrome-profile` on Linux
-```
+- Windows: `%USERPROFILE%\AppData\Local\ms-playwright\mcp-chrome-profile`
+- macOS: `~/Library/Caches/ms-playwright/mcp-chrome-profile`
+- Linux: `~/.cache/ms-playwright/mcp-chrome-profile`
 
-All the logged in information will be stored in that profile, you can delete it between sessions if you'd like to clear the offline state.
+All login information will be stored in that profile; you can delete it between sessions if you'd like to clear the offline state.
 
-
-### Running headless browser (Browser without GUI).
+## Running Headless Browser (Browser without GUI)
 
 This mode is useful for background or batch operations.
 
-```js
+```json
 {
   "mcpServers": {
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest",
+        "@playwright/record-mcp@latest",
         "--headless"
       ]
     }
@@ -108,18 +112,70 @@ This mode is useful for background or batch operations.
 }
 ```
 
-### Running headed browser on Linux w/o DISPLAY
+## Using Video Recording
 
-When running headed browser on system w/o display or from worker processes of the IDEs,
-run the MCP server from environment with the DISPLAY and pass the `--port` flag to enable SSE transport.
+To use the video recording feature, use the `--record` flag:
 
-```bash
-npx @playwright/mcp@latest --port 8931
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/record-mcp@latest",
+        "--record"
+      ]
+    }
+  }
+}
 ```
 
-And then in MCP client config, set the `url` to the SSE endpoint:
+To specify the recording file save path:
 
-```js
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/record-mcp@latest",
+        "--record",
+        "--record-path", "./my-recordings"
+      ]
+    }
+  }
+}
+```
+
+To specify the recording format:
+
+```json
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/record-mcp@latest",
+        "--record",
+        "--record-format", "webm"
+      ]
+    }
+  }
+}
+```
+
+## Running Headed Browser on Linux without DISPLAY
+
+When running a headed browser on a system without a display or from worker processes of IDEs,
+run the MCP server from an environment with DISPLAY and pass the `--port` flag to enable SSE transport.
+
+```bash
+npx @playwright/record-mcp@latest --port 8931
+```
+
+Then, in the MCP client config, set the `url` to the SSE endpoint:
+
+```json
 {
   "mcpServers": {
     "playwright": {
@@ -129,21 +185,28 @@ And then in MCP client config, set the `url` to the SSE endpoint:
 }
 ```
 
-### Docker
+## Docker
 
-**NOTE:** The Docker implementation only supports headless chromium at the moment.
-```js
+**NOTE:** The Docker implementation currently only supports headless Chromium.
+
+```json
 {
   "mcpServers": {
     "playwright": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "--init", "mcp/playwright"]
+      "args": ["run", "-i", "--rm", "--init", "mcp/playwright-record"]
     }
   }
 }
 ```
 
-### Tool Modes
+To build with Docker:
+
+```bash
+docker build -t mcp/playwright-record .
+```
+
+## Tool Modes
 
 The tools are available in two modes:
 
@@ -152,13 +215,13 @@ The tools are available in two modes:
 
 To use Vision Mode, add the `--vision` flag when starting the server:
 
-```js
+```json
 {
   "mcpServers": {
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest",
+        "@playwright/record-mcp@latest",
         "--vision"
       ]
     }
@@ -166,56 +229,39 @@ To use Vision Mode, add the `--vision` flag when starting the server:
 }
 ```
 
-Vision Mode works best with the computer use models that are able to interact with elements using
-X Y coordinate space, based on the provided screenshot.
+Vision Mode works best with computer use models that are able to interact with elements using X-Y coordinate space, based on the provided screenshot.
 
-### Build with Docker
+## Programmatic Usage with Custom Transports
 
-You can build the Docker image yourself.
-```
-docker build -t mcp/playwright .
-```
-
-### Programmatic usage with custom transports
-
-```js
+```javascript
 import http from 'http';
 
-import { createServer } from '@playwright/mcp';
+import { createServer } from '@playwright/record-mcp';
 import { SSEServerTransport } from '@modelcontextprotocol/sdk/server/sse.js';
 
 http.createServer(async (req, res) => {
   // ...
 
-  // Creates a headless Playwright MCP server with SSE transport
-  const mcpServer = await createServer({ headless: true });
+  // Creates a headless Playwright Record MCP server with SSE transport
+  const mcpServer = await createServer({ headless: true, record: true });
   const transport = new SSEServerTransport('/messages', res);
   await mcpServer.connect(transport);
 
   // ...
 });
-
 ```
 
-<!--- Generated by update-readme.js -->
-
-### Snapshot-based Interactions
-
-<!-- NOTE: This has been generated via update-readme.js -->
+## Snapshot-based Interactions
 
 - **browser_snapshot**
   - Description: Capture accessibility snapshot of the current page, this is better than screenshot
   - Parameters: None
-
-<!-- NOTE: This has been generated via update-readme.js -->
 
 - **browser_click**
   - Description: Perform click on a web page
   - Parameters:
     - `element` (string): Human-readable element description used to obtain permission to interact with the element
     - `ref` (string): Exact target element reference from the page snapshot
-
-<!-- NOTE: This has been generated via update-readme.js -->
 
 - **browser_drag**
   - Description: Perform drag and drop between two elements
@@ -225,15 +271,11 @@ http.createServer(async (req, res) => {
     - `endElement` (string): Human-readable target element description used to obtain the permission to interact with the element
     - `endRef` (string): Exact target element reference from the page snapshot
 
-<!-- NOTE: This has been generated via update-readme.js -->
-
 - **browser_hover**
   - Description: Hover over element on page
   - Parameters:
     - `element` (string): Human-readable element description used to obtain permission to interact with the element
     - `ref` (string): Exact target element reference from the page snapshot
-
-<!-- NOTE: This has been generated via update-readme.js -->
 
 - **browser_type**
   - Description: Type text into editable element
@@ -244,186 +286,66 @@ http.createServer(async (req, res) => {
     - `submit` (boolean, optional): Whether to submit entered text (press Enter after)
     - `slowly` (boolean, optional): Whether to type one character at a time. Useful for triggering key handlers in the page. By default entire text is filled in at once.
 
-<!-- NOTE: This has been generated via update-readme.js -->
+## Video Recording Tools (New Feature)
 
-- **browser_select_option**
-  - Description: Select an option in a dropdown
+- **browser_record_start**
+  - Description: Start recording browser interactions
   - Parameters:
-    - `element` (string): Human-readable element description used to obtain permission to interact with the element
-    - `ref` (string): Exact target element reference from the page snapshot
-    - `values` (array): Array of values to select in the dropdown. This can be a single value or multiple values.
+    - `path` (string, optional): Path to save the recording file
+    - `format` (string, optional): Recording format (mp4 or webm)
 
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_take_screenshot**
-  - Description: Take a screenshot of the current page. You can't perform actions based on the screenshot, use browser_snapshot for actions.
-  - Parameters:
-    - `raw` (boolean, optional): Whether to return without compression (in PNG format). Default is false, which returns a JPEG image.
-    - `element` (string, optional): Human-readable element description used to obtain permission to screenshot the element. If not provided, the screenshot will be taken of viewport. If element is provided, ref must be provided too.
-    - `ref` (string, optional): Exact target element reference from the page snapshot. If not provided, the screenshot will be taken of viewport. If ref is provided, element must be provided too.
-
-### Vision-based Interactions
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_screen_capture**
-  - Description: Take a screenshot of the current page
+- **browser_record_stop**
+  - Description: Stop and save browser interaction recording
   - Parameters: None
 
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_screen_move_mouse**
-  - Description: Move mouse to a given position
-  - Parameters:
-    - `element` (string): Human-readable element description used to obtain permission to interact with the element
-    - `x` (number): X coordinate
-    - `y` (number): Y coordinate
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_screen_click**
-  - Description: Click left mouse button
-  - Parameters:
-    - `element` (string): Human-readable element description used to obtain permission to interact with the element
-    - `x` (number): X coordinate
-    - `y` (number): Y coordinate
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_screen_drag**
-  - Description: Drag left mouse button
-  - Parameters:
-    - `element` (string): Human-readable element description used to obtain permission to interact with the element
-    - `startX` (number): Start X coordinate
-    - `startY` (number): Start Y coordinate
-    - `endX` (number): End X coordinate
-    - `endY` (number): End Y coordinate
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_screen_type**
-  - Description: Type text
-  - Parameters:
-    - `text` (string): Text to type into the element
-    - `submit` (boolean, optional): Whether to submit entered text (press Enter after)
-
-### Tab Management
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_tab_list**
-  - Description: List browser tabs
+- **browser_record_pause**
+  - Description: Pause the current recording
   - Parameters: None
 
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_tab_new**
-  - Description: Open a new tab
-  - Parameters:
-    - `url` (string, optional): The URL to navigate to in the new tab. If not provided, the new tab will be blank.
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_tab_select**
-  - Description: Select a tab by index
-  - Parameters:
-    - `index` (number): The index of the tab to select
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_tab_close**
-  - Description: Close a tab
-  - Parameters:
-    - `index` (number, optional): The index of the tab to close. Closes current tab if not provided.
-
-### Navigation
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_navigate**
-  - Description: Navigate to a URL
-  - Parameters:
-    - `url` (string): The URL to navigate to
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_navigate_back**
-  - Description: Go back to the previous page
+- **browser_record_resume**
+  - Description: Resume a paused recording
   - Parameters: None
 
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_navigate_forward**
-  - Description: Go forward to the next page
+- **browser_record_list**
+  - Description: Return a list of current recording files
   - Parameters: None
 
-### Keyboard
+## Examples
 
-<!-- NOTE: This has been generated via update-readme.js -->
+### Starting and Stopping Video Recording
 
-- **browser_press_key**
-  - Description: Press a key on the keyboard
-  - Parameters:
-    - `key` (string): Name of the key to press or a character to generate, such as `ArrowLeft` or `a`
+```javascript
+// Start video recording
+await mcpServer.invoke('browser_record_start', {
+  path: './my-recordings/test-recording.mp4',
+  format: 'mp4'
+});
 
-### Console
+// Perform browser navigation
+await mcpServer.invoke('browser_navigate', {
+  url: 'https://example.com'
+});
 
-<!-- NOTE: This has been generated via update-readme.js -->
+// Interact with the page
+const snapshot = await mcpServer.invoke('browser_snapshot');
+// Find elements in the snapshot...
 
-- **browser_console_messages**
-  - Description: Returns all console messages
-  - Parameters: None
+// Stop video recording
+await mcpServer.invoke('browser_record_stop');
+```
 
-### Files and Media
+## Supported Browsers
 
-<!-- NOTE: This has been generated via update-readme.js -->
+- Chrome
+- Firefox
+- WebKit
+- Microsoft Edge
 
-- **browser_file_upload**
-  - Description: Upload one or multiple files
-  - Parameters:
-    - `paths` (array): The absolute paths to the files to upload. Can be a single file or multiple files.
+## Requirements
 
-<!-- NOTE: This has been generated via update-readme.js -->
+- Node.js 18 or higher
+- The required browser must be installed (or use the `browser_install` tool to install it)
 
-- **browser_pdf_save**
-  - Description: Save page as PDF
-  - Parameters: None
+## License
 
-### Utilities
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_close**
-  - Description: Close the page
-  - Parameters: None
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_wait**
-  - Description: Wait for a specified time in seconds
-  - Parameters:
-    - `time` (number): The time to wait in seconds
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_resize**
-  - Description: Resize the browser window
-  - Parameters:
-    - `width` (number): Width of the browser window
-    - `height` (number): Height of the browser window
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_install**
-  - Description: Install the browser specified in the config. Call this if you get an error about the browser not being installed.
-  - Parameters: None
-
-<!-- NOTE: This has been generated via update-readme.js -->
-
-- **browser_handle_dialog**
-  - Description: Handle a dialog
-  - Parameters:
-    - `accept` (boolean): Whether to accept the dialog.
-    - `promptText` (string, optional): The text of the prompt in case of a prompt dialog.
-
-<!--- End of generated section -->
+Apache-2.0 license
