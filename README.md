@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/korwabs-playwright-record-mcp-badge.png)](https://mseep.ai/app/korwabs-playwright-record-mcp)
+
 # Playwright Record MCP
 
 Playwright Record MCP is a Model Context Protocol (MCP) server that provides browser automation capabilities using [Playwright](https://playwright.dev/). This server adds video recording functionality to record browser interactions. It enables LLMs (Large Language Models) to interact with web pages through structured accessibility snapshots, without requiring screenshots or visual models.
