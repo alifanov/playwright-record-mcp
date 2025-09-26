@@ -114,7 +114,7 @@ async function startSSEServer(port: number, serverList: ServerList) {
     }
   });
 
-  httpServer.listen(port, () => {
+  httpServer.listen(port, '0.0.0.0', () => {
     const address = httpServer.address();
     assert(address, 'Could not bind server socket');
     let url: string;
@@ -123,8 +123,6 @@ async function startSSEServer(port: number, serverList: ServerList) {
     } else {
       const resolvedPort = address.port;
       let resolvedHost = address.family === 'IPv4' ? address.address : `[${address.address}]`;
-      if (resolvedHost === '0.0.0.0' || resolvedHost === '[::]')
-        resolvedHost = 'localhost';
       url = `http://${resolvedHost}:${resolvedPort}`;
     }
     console.log(`Listening on ${url}`);
